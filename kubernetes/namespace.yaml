@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: learning-feed
+  labels:
+    name: learning-feed
+    app: learning-feed-generator

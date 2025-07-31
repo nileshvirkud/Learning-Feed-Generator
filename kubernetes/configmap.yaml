@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: learning-feed-config
+  namespace: learning-feed
+  labels:
+    app: learning-feed-generator
+data:
+  LOG_LEVEL: "INFO"
+  LOG_FILE: "/app/logs/daily_learning.log"
+  DEFAULT_TOPICS: "artificial intelligence,machine learning,python,software engineering,data science"
+  MAX_ARTICLES_PER_TOPIC: "5"
+  CONTENT_MAX_AGE_HOURS: "24"
+  SUMMARY_SENTENCE_COUNT: "3"
+  QUIZ_QUESTIONS_PER_ARTICLE: "2"
+  FLASHCARDS_PER_ARTICLE: "3"
+  API_RATE_LIMIT_PER_MINUTE: "10"

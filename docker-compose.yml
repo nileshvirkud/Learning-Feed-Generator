@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  learning-feed-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: learning-feed-generator:latest
+    container_name: learning-feed-generator
+    environment:
+      # Copy from your .env file or set directly
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - NOTION_TOKEN=${NOTION_TOKEN}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FILE=${LOG_FILE:-/app/logs/daily_learning.log}
+    volumes:
+      - ./logs:/app/logs
+      - ./.env:/app/.env:ro
+    working_dir: /app
+    command: ["python", "-m", "daily_learning.main"]
+    restart: "no"
+    
+  # Development service with interactive mode
+  learning-feed-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: learning-feed-generator:latest
+    container_name: learning-feed-dev
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - NOTION_TOKEN=${NOTION_TOKEN}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      - LOG_FILE=${LOG_FILE:-/app/logs/daily_learning.log}
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    working_dir: /app
+    command: ["tail", "-f", "/dev/null"]
+    restart: "no"
+    stdin_open: true
+    tty: true
+
+networks:
+  default:
+    name: learning-feed-network
