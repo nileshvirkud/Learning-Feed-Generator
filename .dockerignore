@@ -56,8 +56,6 @@ htmlcov/
 
 # Documentation
 docs/
-*.md
-README*
 
 # Development files
 .devcontainer/

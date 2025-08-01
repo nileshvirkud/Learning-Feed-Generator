@@ -141,7 +141,35 @@ Format as JSON:
             )
             
             content = response.choices[0].message.content
-            result = json.loads(content)
+            logger.debug(f"OpenAI quiz response content: {content}")
+            
+            if not content or content.strip() == "":
+                logger.error("OpenAI returned empty content for quiz questions")
+                return []
+            
+            # Try to extract JSON from markdown code blocks first
+            if "```json" in content:
+                start = content.find("```json") + 7
+                end = content.find("```", start)
+                if end > start:
+                    json_content = content[start:end].strip()
+                    logger.debug(f"Extracted JSON from markdown: {json_content}")
+                    try:
+                        result = json.loads(json_content)
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to parse extracted JSON: {e}")
+                        return []
+                else:
+                    logger.error("Found json markdown but couldn't extract content")
+                    return []
+            else:
+                # Try direct JSON parsing
+                try:
+                    result = json.loads(content)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse JSON response for quiz: {e}")
+                    logger.error(f"Raw response content: {repr(content)}")
+                    return []
             
             questions = []
             for q_data in result.get("questions", []):
@@ -180,7 +208,35 @@ Format as JSON:
             )
             
             content = response.choices[0].message.content
-            result = json.loads(content)
+            logger.debug(f"OpenAI flashcard response content: {content}")
+            
+            if not content or content.strip() == "":
+                logger.error("OpenAI returned empty content for flashcards")
+                return []
+            
+            # Try to extract JSON from markdown code blocks first
+            if "```json" in content:
+                start = content.find("```json") + 7
+                end = content.find("```", start)
+                if end > start:
+                    json_content = content[start:end].strip()
+                    logger.debug(f"Extracted JSON from markdown: {json_content}")
+                    try:
+                        result = json.loads(json_content)
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to parse extracted JSON for flashcards: {e}")
+                        return []
+                else:
+                    logger.error("Found json markdown but couldn't extract flashcard content")
+                    return []
+            else:
+                # Try direct JSON parsing
+                try:
+                    result = json.loads(content)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse JSON response for flashcards: {e}")
+                    logger.error(f"Raw response content: {repr(content)}")
+                    return []
             
             flashcards = []
             for f_data in result.get("flashcards", []):

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ..:/workspace:cached
+      - ~/.gitconfig:/root/.gitconfig:ro
+      - ~/.ssh:/root/.ssh:ro
+    command: sleep infinity
+    environment:
+      - PYTHONPATH=/workspace
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"
+      - "5000:5000"
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
