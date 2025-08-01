@@ -193,6 +193,8 @@ docker build -t learning-feed-generator:latest .
 # Run production container
 docker run --env-file .env learning-feed-generator:latest
 
+docker tag learning-feed-generator: virkudnilesh/learning-feed-generator:latest
+
 # Run scheduler in production
 docker run -d --name learning-scheduler --env-file .env learning-feed-generator:latest python run_scheduler.py
 ```

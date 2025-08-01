@@ -45,7 +45,7 @@ class Summarizer:
 
     def create_summary_prompt(self, article: Article, sentence_count: int = 4) -> str:
         """Create a prompt for article summarization"""
-        return f"""You are an educational content curator. Summarize this article about {article.topic} in exactly {sentence_count} sentences that capture the most important learning points. Focus on actionable insights and key concepts that would be valuable for someone learning about {article.topic}. Make it concise but comprehensive.
+        return f"""You are an educational content curator. Summarize the latest development in last 7 days about {article.topic} in exactly {sentence_count} sentences that capture the most important learning points. Focus on actionable insights and key concepts that would be valuable for someone learning about {article.topic}. Make it concise but comprehensive.
 
 Title: {article.title}
 Source: {article.source}
@@ -111,7 +111,9 @@ Format your response as JSON with the following structure:
                             learning_objectives=[],
                         )
                 else:
-                    logger.error("Found json markdown but couldn't extract summary content")
+                    logger.error(
+                        "Found json markdown but couldn't extract summary content"
+                    )
                     return Summary(
                         original_article=article,
                         summary=content[:500],

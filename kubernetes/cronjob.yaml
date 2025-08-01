@@ -19,7 +19,7 @@ spec:
         app: learning-feed-generator
     spec:
       backoffLimit: 2
-      ttlSecondsAfterFinished: 86400  # Clean up jobs after 24 hours
+      ttlSecondsAfterFinished: 86400 # Clean up jobs after 24 hours
       template:
         metadata:
           labels:
@@ -27,89 +27,89 @@ spec:
         spec:
           restartPolicy: Never
           containers:
-          - name: learning-feed-generator
-            image: your-dockerhub-username/learning-feed-generator:latest
-            imagePullPolicy: Always
-            resources:
-              requests:
-                memory: "256Mi"
-                cpu: "100m"
-              limits:
-                memory: "512Mi"
-                cpu: "500m"
-            env:
-            - name: OPENAI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: learning-feed-secrets
-                  key: OPENAI_API_KEY
-            - name: PERPLEXITY_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: learning-feed-secrets
-                  key: PERPLEXITY_API_KEY
-            - name: NOTION_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: learning-feed-secrets
-                  key: NOTION_TOKEN
-            - name: NOTION_DATABASE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: learning-feed-secrets
-                  key: NOTION_DATABASE_ID
-            - name: LOG_LEVEL
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: LOG_LEVEL
-            - name: LOG_FILE
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: LOG_FILE
-            - name: DEFAULT_TOPICS
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: DEFAULT_TOPICS
-            - name: MAX_ARTICLES_PER_TOPIC
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: MAX_ARTICLES_PER_TOPIC
-            - name: CONTENT_MAX_AGE_HOURS
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: CONTENT_MAX_AGE_HOURS
-            - name: SUMMARY_SENTENCE_COUNT
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: SUMMARY_SENTENCE_COUNT
-            - name: QUIZ_QUESTIONS_PER_ARTICLE
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: QUIZ_QUESTIONS_PER_ARTICLE
-            - name: FLASHCARDS_PER_ARTICLE
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: FLASHCARDS_PER_ARTICLE
-            - name: API_RATE_LIMIT_PER_MINUTE
-              valueFrom:
-                configMapKeyRef:
-                  name: learning-feed-config
-                  key: API_RATE_LIMIT_PER_MINUTE
-            volumeMounts:
-            - name: logs
-              mountPath: /app/logs
-            command: ["python", "-m", "daily_learning.main"]
+            - name: learning-feed-generator
+              image: virkudnilesh/learning-feed-generator:latest
+              imagePullPolicy: Always
+              resources:
+                requests:
+                  memory: "256Mi"
+                  cpu: "100m"
+                limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+              env:
+                - name: OPENAI_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: learning-feed-secrets
+                      key: OPENAI_API_KEY
+                - name: PERPLEXITY_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: learning-feed-secrets
+                      key: PERPLEXITY_API_KEY
+                - name: NOTION_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: learning-feed-secrets
+                      key: NOTION_TOKEN
+                - name: NOTION_DATABASE_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: learning-feed-secrets
+                      key: NOTION_DATABASE_ID
+                - name: LOG_LEVEL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: LOG_LEVEL
+                - name: LOG_FILE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: LOG_FILE
+                - name: DEFAULT_TOPICS
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: DEFAULT_TOPICS
+                - name: MAX_ARTICLES_PER_TOPIC
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: MAX_ARTICLES_PER_TOPIC
+                - name: CONTENT_MAX_AGE_HOURS
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: CONTENT_MAX_AGE_HOURS
+                - name: SUMMARY_SENTENCE_COUNT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: SUMMARY_SENTENCE_COUNT
+                - name: QUIZ_QUESTIONS_PER_ARTICLE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: QUIZ_QUESTIONS_PER_ARTICLE
+                - name: FLASHCARDS_PER_ARTICLE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: FLASHCARDS_PER_ARTICLE
+                - name: API_RATE_LIMIT_PER_MINUTE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: learning-feed-config
+                      key: API_RATE_LIMIT_PER_MINUTE
+              volumeMounts:
+                - name: logs
+                  mountPath: /app/logs
+              command: ["python", "-m", "daily_learning.main"]
           volumes:
-          - name: logs
-            emptyDir: {}
+            - name: logs
+              emptyDir: {}
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
